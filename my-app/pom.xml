@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.globant.bootcamp</groupId>
+  <artifactId>my-app</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>my-app</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <logging-depsVersion>1.0.0</logging-depsVersion>
+    <testing-depsVersion>1.0.0</testing-depsVersion>
+    <surefireVersion>2.22.0</surefireVersion>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.globant.bootcamp</groupId>
+      <artifactId>testing-deps</artifactId>
+      <version>${testing-depsVersion}</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.globant.bootcamp</groupId>
+      <artifactId>logging-deps</artifactId>
+      <version>${logging-depsVersion}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+</project>

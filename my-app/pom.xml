@@ -12,6 +12,7 @@
     <logging-depsVersion>1.0.0</logging-depsVersion>
     <testing-depsVersion>1.0.0</testing-depsVersion>
     <surefireVersion>2.22.0</surefireVersion>
+    <lombokVersion>1.16.20</lombokVersion>
   </properties>
 
   <dependencies>
@@ -27,6 +28,12 @@
       <artifactId>logging-deps</artifactId>
       <version>${logging-depsVersion}</version>
       <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombokVersion}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

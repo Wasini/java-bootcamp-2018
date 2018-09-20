@@ -1,4 +1,7 @@
 # Java-bootcamp-2018-Goal1-Rodrigo-Grazini
+#### Building
+Use the install script to clean install the project, by default it will skip tests, run script with arg -t to run tests
+
 #### Topic 1: Maven (1 day)
 
 ##### Reading:

@@ -82,7 +82,6 @@ public class SinglyLinkedList {
         }
     }
 
-
     /**
      * Checks whether or not the current list has not values.
      * @return true iff the current list is empty, false otherwise.

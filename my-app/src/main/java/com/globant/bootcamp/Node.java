@@ -7,8 +7,6 @@ import lombok.Setter;
 
 @RequiredArgsConstructor
 public class Node {
-
     @Getter @Setter @NonNull private int  value;
-
     @Getter @Setter private Node next = null;
 }

@@ -21,7 +21,7 @@ public class SinglyLinkedList {
     /**
      * Creates a new list containing all the values from @another list in the same order
      */
-    public SinglyLinkedList(SinglyLinkedList another) {
+    public SinglyLinkedList(@NonNull SinglyLinkedList another) {
         /* Ficticious Node */
         this.setHeader(new Node(0));
         Node prev = this.getHeader();
@@ -33,7 +33,6 @@ public class SinglyLinkedList {
             prev = newn;
             currAnother = currAnother.getNext();
         }
-
         setSize(another.getSize());
     }
 

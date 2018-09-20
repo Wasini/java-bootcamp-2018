@@ -25,6 +25,4 @@ while [ "$1" != "" ]; do
     shift
 done
 
-(cd logging-deps/ && mvn clean install) \
-& (cd testing-deps/ && mvn clean install) \
-&& cd my-app/ && mvn clean install $args
+mvn clean install $args

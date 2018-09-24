@@ -1,4 +1,4 @@
 package com.globant.bootcamp;
 
-public class Dekstop {
+public class Desktop {
 }

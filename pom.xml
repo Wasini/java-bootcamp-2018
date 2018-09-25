@@ -9,7 +9,6 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4jVersion>1.2.17</log4jVersion>
         <lombokVersion>1.16.20</lombokVersion>
         <surefireVersion>2.22.0</surefireVersion>
         <junitVersion>4.12</junitVersion>
@@ -55,11 +54,6 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
         <version>${slf4jVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>${log4jVersion}</version>
       </dependency>
     </dependencies>
     

@@ -1,5 +1,6 @@
 package com.globant.bootcamp;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,13 +22,20 @@ public class DesktopTest {
     public void setUp() {
         desktop = new Desktop();
         fullRecentFileListDesktop = new Desktop();
-        recentlyOpenedFile = new File();
-        unopenedFile = new File();
+        recentlyOpenedFile = File.builder("~/secrets.txt").build();
+        desktop.openFile(recentlyOpenedFile);
+        fullRecentFileListDesktop.openFile(recentlyOpenedFile);
+        for (int i = 0 ; i < 15 ; i++) {
+            File logFile = File.builder("~/logs/file" + i).build();
+            fullRecentFileListDesktop.openFile(logFile);
+        }
+        unopenedFile = File.builder("~/todo").build();
     }
 
     @Test
     public void WhenDesktopInitializesThenRecentFilesIsEmpty() {
-        assertTrue(!desktop.hasRecentFiles());
+        Desktop emptyDesk = new Desktop();
+        assertTrue(!emptyDesk.hasRecentFiles());
     }
 
     @Test
@@ -45,7 +53,7 @@ public class DesktopTest {
     @Test
     public void ifOpenedFileIsRecentThenItDoesNotDuplicateInList() {
         desktop.openFile(recentlyOpenedFile);
-        List<File> fileHistory = desktop.getFileHistory();
+        Collection<Object> fileHistory = desktop.getFileHistory();
         int fileCount = Collections.frequency(fileHistory, recentlyOpenedFile);
         assertThat(fileCount, equalTo(1));
     }

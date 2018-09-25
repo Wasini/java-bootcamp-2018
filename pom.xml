@@ -9,7 +9,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <lombokVersion>1.16.20</lombokVersion>
+        <lombokVersion>1.18.2</lombokVersion>
         <surefireVersion>2.22.0</surefireVersion>
         <junitVersion>4.12</junitVersion>
         <hamcrestallVersion>1.3</hamcrestallVersion>

@@ -9,25 +9,28 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class DesktopTest {
 
     private Desktop desktop;
-    private Desktop fullRecentFileListDesktop;
+    private Desktop messyDesktop;
     private File    recentlyOpenedFile;
     private File    unopenedFile;
 
     @Before
     public void setUp() {
         desktop = new Desktop();
-        fullRecentFileListDesktop = new Desktop();
+        messyDesktop = new Desktop();
+        
         recentlyOpenedFile = File.builder("~/secrets.txt").build();
         desktop.openFile(recentlyOpenedFile);
-        fullRecentFileListDesktop.openFile(recentlyOpenedFile);
-        for (int i = 0 ; i < 15 ; i++) {
+        messyDesktop.openFile(recentlyOpenedFile);
+        
+        for (int i = 0 ; i < 25 ; i++) {
             File logFile = File.builder("~/logs/file" + i).build();
-            fullRecentFileListDesktop.openFile(logFile);
+            messyDesktop.openFile(logFile);
         }
         unopenedFile = File.builder("~/todo").build();
     }
@@ -60,9 +63,10 @@ public class DesktopTest {
 
     @Test
     public void ifRecentFileListIsFullThenOldestOpenedFileIsRemovedFromList() {
-        File oldestFile = fullRecentFileListDesktop.getOldestOpenedFile();
-        fullRecentFileListDesktop.openFile(unopenedFile);
-        assertTrue(!fullRecentFileListDesktop.hasRecentlyOpen(oldestFile));
+        assumeTrue(messyDesktop.reachedCapacity());
+        File oldestFile = messyDesktop.getOldestOpenedFile();
+        messyDesktop.openFile(unopenedFile);
+        assertTrue(!messyDesktop.hasRecentlyOpen(oldestFile));
     }
 
 }

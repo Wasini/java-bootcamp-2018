@@ -1,4 +1,9 @@
 package com.globant.bootcamp;
 
-public class Blog {
+public interface Blog {
+    void post(Post entry);
+    
+    Post getLastEntry();
+    
+    int getPostCount();
 }

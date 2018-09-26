@@ -27,15 +27,17 @@ public class IntBetweenSupplier extends ParameterSupplier {
         int rangeMin = Annotation.rangeMin();
         int rangeMax = Annotation.rangeMax();
         int cant = Annotation.cant();
+        
         List<PotentialAssignment> values = new ArrayList<PotentialAssignment>();
-        for(int k=0; k <= cant; k++) {
-            int range = ThreadLocalRandom.current().nextInt(sizeMin,sizeMax+1);
-            SinglyLinkedList l = new SinglyLinkedList();
-            for(int i = 0; i < range; i++ ) {
-                l.addFirst(ThreadLocalRandom.current().nextInt(rangeMin,rangeMax+1));
+        for(int currentList=0; currentList <= cant; currentList++) {
+            int listSize = ThreadLocalRandom.current().nextInt(sizeMin,sizeMax+1);
+            SinglyLinkedList generatedSLL = new SinglyLinkedList();
+            for(int i = 0; i < listSize; i++ ) {
+                generatedSLL.addFirst(ThreadLocalRandom.current().nextInt(rangeMin,rangeMax+1));
             }
-            values.add(PotentialAssignment.forValue(l.toString(),l));
+            values.add(PotentialAssignment.forValue(generatedSLL.toString(), generatedSLL));
         }
+        
         return values;
     }
 }

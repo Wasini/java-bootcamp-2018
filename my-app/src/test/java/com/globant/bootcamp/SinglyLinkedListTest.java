@@ -51,13 +51,13 @@ public class SinglyLinkedListTest {
     }
     
     @Test
-    public void noArgsConstructor_createsEmptyList() {
+    public void whenNewSinglyLinkedListIsCreatedItIsEmpty() {
         SinglyLinkedList emptySll = new SinglyLinkedList();
         assertTrue(emptySll.isEmpty());
     }
     
     @Test(expected = NullPointerException.class)
-    public void nullArgConstrcutor_throwException() {
+    public void whenPassingNullArgumentConstructorThenThrowsNullPointerException() {
         SinglyLinkedList copyList = new SinglyLinkedList(null);
     }
 }

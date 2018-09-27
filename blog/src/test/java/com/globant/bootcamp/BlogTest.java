@@ -41,6 +41,12 @@ public class BlogTest {
 		assertTrue(freshBlog.isEmpty() && freshBlog.getPostCount() == 0);
 	}
 
+	@Test(expected = Exception.class)
+	public void whenGettingLastEntryOfEmptyBlogThenItShouldThrowAnException() {
+		Blog freshBlog = BlogImpl.createBlogImpl();
+		freshBlog.getLastEntry();
+	}
+
 	@Test
 	public void whenNewEntryIsPostedThenBlogContainsTheNewEntry() {
 		String postContent = "Hello there";
@@ -95,6 +101,11 @@ public class BlogTest {
 		for (Post post : lastPosts) {
 			assertThat(post, hasProperty(POST_CONTENT_PROPERTY, not(equalTo(oldPostContent))));
 		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void whenRemovingNonExisitingPostThenItAnException() {
+		blog.removePost(blog.getPostCount() + 1);
 	}
 
 	private class BlogSpammer {

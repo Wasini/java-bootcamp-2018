@@ -1,5 +1,6 @@
 package com.globant.bootcamp;
 
+import lombok.Getter;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,6 +13,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BlogTest {
@@ -19,13 +22,13 @@ public class BlogTest {
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 
+	/* Used for reflection */
+	private static final String POST_CONTENT_PROPERTY = "content";
+
 	private Blog blog;
 
 	@Mock
-	Post entryMock1;
-
-	@Mock
-	Post entryMock2;
+	Post entryMock;
 
 	@Before
 	public void setUp() {
@@ -35,16 +38,17 @@ public class BlogTest {
 	@Test
 	public void whenBlogInitializesItHasNoPosts() {
 		Blog freshBlog = BlogImpl.createBlogImpl();
+		assertTrue(freshBlog.isEmpty() && freshBlog.getPostCount() == 0);
 	}
 
 	@Test
 	public void whenNewEntryIsPostedThenBlogContainsTheNewEntry() {
 		String postContent = "Hello there";
 		String postAuthor = "General Kenobi";
-		when(entryMock1.getContent()).thenReturn(postContent);
-		when(entryMock1.getAuthor()).thenReturn(postAuthor);
+		when(entryMock.getContent()).thenReturn(postContent);
+		when(entryMock.getAuthor()).thenReturn(postAuthor);
 
-		blog.post(entryMock1);
+		blog.post(entryMock);
 
 		Post lastEntry = blog.getLastEntry();
 		assertThat(lastEntry.getContent(), is(equalTo(postContent)));
@@ -54,13 +58,13 @@ public class BlogTest {
 	@Test
 	public void whenEntryIsPostedThenBlogPostCountIncreases() {
 		int previousBlogPostCount = blog.getPostCount();
-		blog.post(entryMock1);
+		blog.post(entryMock);
 		assertThat(blog.getPostCount(), is(greaterThan(previousBlogPostCount)));
 	}
 
 	@Test
 	public void whenDeletingEntryThenBlogPostCountDecreases() {
-		blog.post(entryMock1);
+		blog.post(entryMock);
 		int previousBlogPostCount = blog.getPostCount();
 		blog.removePost(0);
 		assertThat(blog.getPostCount(), is(lessThan(previousBlogPostCount)));
@@ -70,13 +74,12 @@ public class BlogTest {
 	public void ifThereAreLessThan10PostsThenGetPostHistoryReturnsTheCurrentBlogPosts() {
 		final int postedAmount = 6;
 		String postContent = "Spam!";
-		when(entryMock1.getContent()).thenReturn(postContent);
+		new BlogSpammer(blog).spam(postContent, postedAmount);
 
-		addPostsToBlog(entryMock1, postedAmount);
 		List<Post> lastPosts = blog.getLastPosts();
 		assertThat(lastPosts.size(), equalTo(postedAmount));
 		for (Post post : lastPosts) {
-			assertThat(post, hasProperty("content", is(postContent)));
+			assertThat(post, hasProperty(POST_CONTENT_PROPERTY, is(postContent)));
 		}
 	}
 
@@ -85,21 +88,39 @@ public class BlogTest {
 		final int postsLimit = 10;
 		String oldPostContent = "This post is old";
 		String moreSpamContent = "Spam spam spam";
-		when(entryMock2.getContent()).thenReturn(oldPostContent);
-		when(entryMock1.getContent()).thenReturn(moreSpamContent);
+		new BlogSpammer(blog).spam(oldPostContent, 5).spam(moreSpamContent, postsLimit);
 
-		addPostsToBlog(entryMock2, 3);
-		addPostsToBlog(entryMock1, 10);
 		List<Post> lastPosts = blog.getLastPosts();
 		assertThat(lastPosts.size(), equalTo(postsLimit));
 		for (Post post : lastPosts) {
-			assertThat(post, hasProperty("content", not(equalTo(oldPostContent))));
+			assertThat(post, hasProperty(POST_CONTENT_PROPERTY, not(equalTo(oldPostContent))));
 		}
 	}
 
-	private void addPostsToBlog(Post post, int amount) {
-		for (int i = 0; i < amount; i++) {
-			blog.post(post);
+	private class BlogSpammer {
+
+		@Getter
+		private final Blog blog;
+
+		public BlogSpammer(Blog blog) {
+			this.blog = blog;
+		}
+
+		public BlogSpammer spam(int times) {
+			for (int i = 0; i < times; i++) {
+				blog.post(mock(Post.class));
+			}
+			return this;
+		}
+
+		public BlogSpammer spam(String content, int times) {
+			Post postWithContent;
+			for (int i = 0; i < times; i++) {
+				postWithContent = mock(Post.class);
+				when(postWithContent.getContent()).thenReturn(content);
+				blog.post(postWithContent);
+			}
+			return this;
 		}
 	}
 }

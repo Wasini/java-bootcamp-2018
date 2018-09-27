@@ -2,18 +2,14 @@ package com.globant.bootcamp;
 
 import java.util.Date;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.AccessLevel;
+import lombok.*;
 
 @Data
 @Builder(builderMethodName = "hiddenBuilder")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "path")
 public class File {
     
-    @EqualsAndHashCode.Include private String path;
+    @Getter private String path;
     
     @Setter(AccessLevel.NONE)
     @Builder.Default private Date created = new Date();

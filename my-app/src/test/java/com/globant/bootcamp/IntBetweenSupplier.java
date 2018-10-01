@@ -20,8 +20,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class IntBetweenSupplier extends ParameterSupplier {
     @Override
-    public List<PotentialAssignment> getValueSources(ParameterSignature sig){
-        IntBetween Annotation = sig.getAnnotation(IntBetween.class);
+    public List<PotentialAssignment> getValueSources(ParameterSignature parameterSignature){
+        IntBetween Annotation = parameterSignature.getAnnotation(IntBetween.class);
         int sizeMin = Annotation.sizeMin();
         int sizeMax = Annotation.sizeMax();
         int rangeMin = Annotation.rangeMin();

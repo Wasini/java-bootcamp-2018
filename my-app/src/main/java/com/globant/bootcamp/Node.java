@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Node {
-    @Getter @Setter @NonNull private int  value;
-    @Getter @Setter private Node next = null;
+    @NonNull private int  value;
+    private Node next = null;
 }

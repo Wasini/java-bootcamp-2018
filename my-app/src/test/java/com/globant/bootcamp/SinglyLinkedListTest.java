@@ -20,14 +20,14 @@ import static org.junit.Assume.assumeTrue;
 public class SinglyLinkedListTest {
     
     @Theory
-    public void copyConstructorHasTheSameElementsInOrder(@IntBetween(sizeMin = 0, sizeMax = 15,rangeMin = -5,rangeMax = 5,cant = 25) SinglyLinkedList l) {
-        assumeTrue(!l.isEmpty());
-        SinglyLinkedList copy = new SinglyLinkedList(l);
+    public void copyConstructorHasTheSameElementsInOrder(@IntBetween(sizeMin = 0, sizeMax = 15,rangeMin = -5,rangeMax = 5,cant = 25) SinglyLinkedList providedList) {
+        assumeTrue(!providedList.isEmpty());
+        SinglyLinkedList copy = new SinglyLinkedList(providedList);
         Node copyNode = copy.getHeader().getNext();
         Node originalNode = copy.getHeader().getNext();
         int elementIndex = 0;
         while(copyNode != null){
-            assertThat("Element at index " + elementIndex + "has the same value in both SLL",copyNode.getValue(),equalTo(originalNode.getValue()));
+            assertThat("Element at index " + elementIndex + "has the same value in both SLL", copyNode.getValue(),equalTo(originalNode.getValue()));
             copyNode = copyNode.getNext();
             originalNode = originalNode.getNext();
             elementIndex++;
@@ -35,19 +35,19 @@ public class SinglyLinkedListTest {
     }
 
     @Theory
-    public void removingAnElementDecreasesSize(@IntBetween(sizeMin =1, sizeMax =10,rangeMin = -5,rangeMax = 5,cant = 25) SinglyLinkedList l) {
-        final int element = 3;
-        assumeTrue(l.contains(element));
-        int prevSize = l.getSize();
-        l.remove(element);
-        assertThat("Size of list decreased after removing element "+element,prevSize,greaterThan(l.getSize()));
+    public void removingAnElementDecreasesSize(@IntBetween(sizeMin =1, sizeMax =10,rangeMin = -5,rangeMax = 5,cant = 25) SinglyLinkedList providedList) {
+        final int ELEMENT = 3;
+        assumeTrue(providedList.contains(ELEMENT));
+        int prevSize = providedList.getSize();
+        providedList.remove(ELEMENT);
+        assertThat("Size of list decreased after removing element "+ELEMENT, prevSize,greaterThan(providedList.getSize()));
     }
 
     @Theory
-    public void containsAnAddedElement(@IntBetween(sizeMin = 0, sizeMax =20,rangeMin = -1,rangeMax = 5,cant = 15) SinglyLinkedList l) {
-        final int element = 5;
-        l.addFirst(element);
-        assertTrue("List contains element " + element + " after using add method",l.contains(element));
+    public void containsAnAddedElement(@IntBetween(sizeMin = 0, sizeMax =20,rangeMin = -1,rangeMax = 5,cant = 15) SinglyLinkedList providedList) {
+        final int ELEMENT = 5;
+        providedList.addFirst(ELEMENT);
+        assertTrue("List contains element " + ELEMENT + " after using add method",providedList.contains(ELEMENT));
     }
     
     @Test

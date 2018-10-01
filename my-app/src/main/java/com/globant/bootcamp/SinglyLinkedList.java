@@ -63,13 +63,13 @@ public class SinglyLinkedList {
     }
 
     public boolean isEmpty() {
-        return header.getNext() == null;
+        return size == 0;
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
         Node currentNode = header.getNext();
-        for (int i = 0; i < getSize(); i++) {
+        for (int i = 0; i < size; i++) {
             stringBuilder.append(currentNode.getValue());
             if (i < getSize() - 1)
                 stringBuilder.append(",");

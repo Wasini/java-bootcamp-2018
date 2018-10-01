@@ -1,42 +1,36 @@
 package com.globant.bootcamp;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * Representation of a singled linked list of integers with a fictitious node with value 0
  */
-@Getter
-@Setter
+@Value
 public class SinglyLinkedList {
 
-    @NonNull private Node header;
-    @NonNull private int  size;
+    @NonNull Node header;
+    
+    @NonFinal @NonNull int size;
 
     public SinglyLinkedList() {
         /* Fictitious Node */
-        this.setHeader(new Node(0));
-        this.setSize(0);
+        header = new Node(0);
+        size = 0;
     }
 
     public SinglyLinkedList(@NonNull SinglyLinkedList another) {
-        /* Ficticious Node */
-        this.setHeader(new Node(0));
-        Node previousNode = this.getHeader();
-        Node currentNode = another.getHeader().getNext();
-
-        for (int i = 0; i < another.getSize(); i++) {
-            Node newNode = new Node(currentNode.getValue());
-            previousNode.setNext(newNode);
-            previousNode = newNode;
-            currentNode = currentNode.getNext();
-        }
-        setSize(another.getSize());
+        header = another.getHeader();
+        size = another.getSize();
+    }
+    
+    public Node getHeader(){
+        return new Node(header);
     }
 
     public boolean contains(int value) {
-        Node current = getHeader().getNext();
+        Node current = header.getNext();
         boolean founded = false;
         while (current != null && !founded) {
             if (current.getValue() == value)
@@ -48,14 +42,14 @@ public class SinglyLinkedList {
 
     public void addFirst(int value) {
         Node newNode = new Node(value);
-        newNode.setNext(getHeader().getNext());
-        getHeader().setNext(newNode);
+        newNode.setNext(header.getNext());
+        header.setNext(newNode);
         size++;
     }
 
-    public void remove(int value) {
-        Node currentNode = getHeader().getNext();
-        Node previousNode = getHeader();
+    public void removeValue(int value) {
+        Node currentNode = header.getNext();
+        Node previousNode = header;
 
         while (currentNode != null && currentNode.getValue() != value) {
             previousNode = currentNode;
@@ -69,12 +63,12 @@ public class SinglyLinkedList {
     }
 
     public boolean isEmpty() {
-        return getHeader().getNext() == null;
+        return header.getNext() == null;
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
-        Node currentNode = getHeader().getNext();
+        Node currentNode = header.getNext();
         for (int i = 0; i < getSize(); i++) {
             stringBuilder.append(currentNode.getValue());
             if (i < getSize() - 1)

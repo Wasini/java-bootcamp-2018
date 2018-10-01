@@ -24,7 +24,7 @@ public class SinglyLinkedListTest {
         assumeTrue(!providedList.isEmpty());
         SinglyLinkedList copy = new SinglyLinkedList(providedList);
         Node copyNode = copy.getHeader().getNext();
-        Node originalNode = copy.getHeader().getNext();
+        Node originalNode = providedList.getHeader().getNext();
         int elementIndex = 0;
         while(copyNode != null){
             assertThat("Element at index " + elementIndex + "has the same value in both SLL", copyNode.getValue(),equalTo(originalNode.getValue()));
@@ -39,7 +39,7 @@ public class SinglyLinkedListTest {
         final int ELEMENT = 3;
         assumeTrue(providedList.contains(ELEMENT));
         int prevSize = providedList.getSize();
-        providedList.remove(ELEMENT);
+        providedList.removeValue(ELEMENT);
         assertThat("Size of list decreased after removing element "+ELEMENT, prevSize,greaterThan(providedList.getSize()));
     }
 

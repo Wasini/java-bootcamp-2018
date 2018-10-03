@@ -5,9 +5,7 @@ import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.PotentialAssignment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,9 +13,14 @@ import static org.mockito.Mockito.when;
 public class ItemListSupplier extends ParameterSupplier {
 
 	public final static int POTENTIAL_ASSIGNEMENT_COUNT = 30;
-	public final static String[] ITEM_NAMES = { "Mochila", "Mouse", "Gotita", "Fernet", "Coca", "Lapiz B2", "", "Deo Rexona",
-			"Diccionario", "ZODIDUCE", "KARMAN", "ANIBIMA", "SUPH" };
+
+	public final static String[] ITEM_NAMES = { "Mochila", "Mouse", "Gotita", "Fernet", "Coca", "Lapiz B2", "",
+			"Deo Rexona", "Diccionario", "ZODIDUCE", "KARMAN", "ANIBIMA", "SUPH" };
+
+	private List<Item> mockedItems;
+
 	private long minPrice;
+
 	private long maxPrice;
 
 	@Override
@@ -27,28 +30,32 @@ public class ItemListSupplier extends ParameterSupplier {
 		minPrice = Annotation.minPrice();
 		maxPrice = Annotation.maxPrice();
 
+		generateMockItems();
 		List<PotentialAssignment> values = new ArrayList<>();
 		for (int i = 0; i < POTENTIAL_ASSIGNEMENT_COUNT; i++) {
 			List<Item> items = new ArrayList<>(listSize);
 			for (int j = 0; j < listSize; j++) {
-				items.add(generateMockItem());
+				items.add(getRandomItem());
 			}
 			values.add(PotentialAssignment.forValue(items.toString(), items));
 		}
-
 		return values;
 	}
 
-	private Item generateMockItem() {
-		Item mockItem = mock(Item.class);
-		when(mockItem.getName()).thenReturn(getRandomName());
-		when(mockItem.getPrice()).thenReturn(getRandomLong());
-		return mockItem;
+	private void generateMockItems() {
+		mockedItems = new LinkedList<>();
+		for (String name : ITEM_NAMES) {
+			Item mockItem = mock(Item.class);
+			when(mockItem.getId()).thenReturn(UUID.randomUUID());
+			when(mockItem.getName()).thenReturn(name);
+			when(mockItem.getPrice()).thenReturn(getRandomLong());
+			mockedItems.add(mockItem);
+		}
 	}
 
-	private String getRandomName() {
-		int rnd = new Random().nextInt(ITEM_NAMES.length);
-		return ITEM_NAMES[rnd];
+	private Item getRandomItem() {
+		int chosenIndex = new Random().nextInt(mockedItems.size());
+		return mockedItems.get(chosenIndex);
 	}
 
 	private long getRandomLong() {

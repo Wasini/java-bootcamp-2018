@@ -1,9 +1,11 @@
 package com.globant.bootcamp.model;
 
-import com.sun.corba.se.spi.ior.Identifiable;
+import java.util.UUID;
 
-public interface Item extends Identifiable {
+public interface Item {
 	String getName();
 
 	long getPrice();
+
+	UUID getId();
 }

@@ -3,7 +3,6 @@ package com.globant.bootcamp;
 import com.globant.bootcamp.model.Item;
 import com.globant.bootcamp.model.ShoppingCart;
 import com.globant.bootcamp.model.User;
-import com.globant.bootcamp.services.management.CartManagementHistory;
 import com.globant.bootcamp.services.transaction.PaymentException;
 import com.globant.bootcamp.services.transaction.PaymentService;
 import org.junit.Rule;
@@ -39,9 +38,6 @@ public class ShoppingCartImplTest {
 
 	@Mock
 	PaymentService paymentService;
-
-	@Mock
-	CartManagementHistory cartManagementHistory;
 
 	@InjectMocks
 	ShoppingCartImpl cart;

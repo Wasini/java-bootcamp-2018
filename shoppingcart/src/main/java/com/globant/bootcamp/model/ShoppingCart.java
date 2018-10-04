@@ -30,10 +30,6 @@ public interface ShoppingCart {
 
 	List<Item> getItems();
 
-	List<Item> getLastPurchases();
-
-	List<Item> getLastAdditions();
-
 	User getUser();
 
 	long getPurchaseTotal();

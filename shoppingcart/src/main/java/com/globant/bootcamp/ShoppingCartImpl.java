@@ -4,7 +4,6 @@ import com.globant.bootcamp.model.Item;
 import com.globant.bootcamp.model.ShoppingCart;
 import com.globant.bootcamp.model.Transaction;
 import com.globant.bootcamp.model.User;
-import com.globant.bootcamp.services.management.CartManagementHistory;
 import com.globant.bootcamp.services.transaction.PaymentException;
 import com.globant.bootcamp.services.transaction.PaymentService;
 import com.google.common.collect.HashMultiset;
@@ -21,8 +20,6 @@ public class ShoppingCartImpl implements ShoppingCart {
 	private final User user;
 
 	private PaymentService paymentService;
-
-	private CartManagementHistory cartManagementHistory;
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -90,16 +87,6 @@ public class ShoppingCartImpl implements ShoppingCart {
 	public List<Item> getItems() {
 		return new ArrayList<>(cachedItems);
 	}
-
-	@Override
-	public List<Item> getLastPurchases() {
-		throw new UnsupportedOperationException("Not implemented yet");
-	} //TODO
-
-	@Override
-	public List<Item> getLastAdditions() {
-		throw new UnsupportedOperationException("Not implemented yet");
-	} //TODO
 
 	@Override
 	public int getItemCount(@NonNull Item item) {

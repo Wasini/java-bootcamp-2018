@@ -6,13 +6,13 @@ import com.globant.bootcamp.model.User;
 import com.globant.bootcamp.services.management.CartManagementHistory;
 import com.globant.bootcamp.services.transaction.PaymentException;
 import com.globant.bootcamp.services.transaction.PaymentService;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -24,8 +24,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 @RunWith(Theories.class)
 public class ShoppingCartImplTest {
@@ -33,34 +32,29 @@ public class ShoppingCartImplTest {
 	@Rule
 	public MockitoRule rule = MockitoJUnit.rule();
 
-	private final static int AMOUNT_TO_ADD = 10;
+	private final static int AMOUNT_TO_ADD = 15;
 
 	@Mock
-	private User customer;
+	User user;
 
 	@Mock
-	private PaymentService paymentService;
+	PaymentService paymentService;
 
 	@Mock
-	private CartManagementHistory cartManagementHistory;
+	CartManagementHistory cartManagementHistory;
 
 	@InjectMocks
-	private ShoppingCartImpl cart;
-
-	@Before
-	public void setUp() {
-		cart = new ShoppingCartImpl(customer);
-	}
+	ShoppingCartImpl cart;
 
 	@Test
 	public void shouldBeEmptyWhenNewCartIsCreated() {
-		ShoppingCart newCart = new ShoppingCartImpl(customer);
+		ShoppingCart newCart = ShoppingCartImpl.builder(user).build();
 		assertThat(newCart.isEmpty(), is(true));
 	}
 
 	@Test
 	public void purchaseTotalShouldBeZeroWhenCartIsEmpty() {
-		ShoppingCart newCart = new ShoppingCartImpl(customer);
+		ShoppingCart newCart = ShoppingCartImpl.builder(user).build();
 		assertThat(newCart.getPurchaseTotal(), equalTo(0L));
 	}
 
@@ -164,7 +158,6 @@ public class ShoppingCartImplTest {
 	@Theory
 	public void whenItemIsPurchasedThenTheItemShouldNotBeInTheCart(
 			@ItemSig(minPrice = 0L, maxPrice = 2500L) Item item) throws PaymentException {
-		when(paymentService.validatePayment(anyLong())).thenReturn(true);
 		cart.addItem(item, getRandomAmount(AMOUNT_TO_ADD));
 		cart.purchase(item);
 		assertFalse(cart.contains(item));
@@ -172,7 +165,6 @@ public class ShoppingCartImplTest {
 
 	@Test(expected = NullPointerException.class)
 	public void purchaseOfNullItemShouldThrowException() throws PaymentException {
-		when(paymentService.validatePayment(anyLong())).thenReturn(true);
 		cart.purchase(null);
 	}
 
@@ -181,7 +173,7 @@ public class ShoppingCartImplTest {
 			@ItemList(listSize = 15, minPrice = 0L, maxPrice = 5700L) List<Item> itemsToAdd) throws PaymentException {
 		cart.addAll(itemsToAdd);
 		assumeTrue(!cart.isEmpty());
-		when(paymentService.validatePayment(anyLong())).thenReturn(true);
+		doNothing().when(paymentService).performTransaction(Matchers.any(), Matchers.any());
 
 		cart.purchaseAll();
 		assertTrue(cart.isEmpty());
@@ -192,7 +184,7 @@ public class ShoppingCartImplTest {
 			@ItemList(listSize = 10, minPrice = 0L, maxPrice = 100500L) List<Item> itemsToAdd) {
 		cart.addAll(itemsToAdd);
 
-		assertThat(cart.getItems(), containsInAnyOrder(itemsToAdd));
+		assertThat(cart.getItems(), everyItem(isIn(itemsToAdd)));
 	}
 
 	@Theory

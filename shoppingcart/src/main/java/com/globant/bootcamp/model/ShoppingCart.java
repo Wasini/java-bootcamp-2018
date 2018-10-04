@@ -34,7 +34,7 @@ public interface ShoppingCart {
 
 	List<Item> getLastAdditions();
 
-	User getCustomer();
+	User getUser();
 
 	long getPurchaseTotal();
 

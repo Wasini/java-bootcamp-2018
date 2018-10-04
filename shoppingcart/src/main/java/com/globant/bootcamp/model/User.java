@@ -1,4 +1,5 @@
 package com.globant.bootcamp.model;
 
 public interface User {
+	Account getAccount();
 }

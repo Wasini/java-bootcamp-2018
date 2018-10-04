@@ -33,10 +33,7 @@ public class ItemListSupplier extends ParameterSupplier {
 		generateMockItems();
 		List<PotentialAssignment> values = new ArrayList<>();
 		for (int i = 0; i < POTENTIAL_ASSIGNEMENT_COUNT; i++) {
-			List<Item> items = new ArrayList<>(listSize);
-			for (int j = 0; j < listSize; j++) {
-				items.add(getRandomItem());
-			}
+			List<Item> items = generatePotentialItemList(listSize);
 			values.add(PotentialAssignment.forValue(items.toString(), items));
 		}
 		return values;
@@ -48,9 +45,17 @@ public class ItemListSupplier extends ParameterSupplier {
 			Item mockItem = mock(Item.class);
 			when(mockItem.getId()).thenReturn(UUID.randomUUID());
 			when(mockItem.getName()).thenReturn(name);
-			when(mockItem.getPrice()).thenReturn(getRandomLong());
+			when(mockItem.getPrice()).thenReturn(getBoundedPrice());
 			mockedItems.add(mockItem);
 		}
+	}
+
+	private List<Item> generatePotentialItemList(int listSize) {
+		List<Item> items = new ArrayList<>(listSize);
+		for (int j = 0; j < listSize; j++) {
+			items.add(getRandomItem());
+		}
+		return items;
 	}
 
 	private Item getRandomItem() {
@@ -58,7 +63,7 @@ public class ItemListSupplier extends ParameterSupplier {
 		return mockedItems.get(chosenIndex);
 	}
 
-	private long getRandomLong() {
+	private long getBoundedPrice() {
 		return minPrice + (long) (Math.random() * (maxPrice - minPrice));
 	}
 }

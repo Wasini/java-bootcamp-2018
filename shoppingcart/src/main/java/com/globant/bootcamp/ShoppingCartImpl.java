@@ -11,7 +11,7 @@ import com.google.common.collect.Multiset;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Data
 @Builder(builderMethodName = "hiddenBuilder")
@@ -41,7 +41,8 @@ public class ShoppingCartImpl implements ShoppingCart {
 
 	@Override
 	public void clear() {
-		cachedItems.clear();
+		if (!isEmpty())
+			cachedItems.clear();
 	}
 
 	@Override
@@ -55,52 +56,64 @@ public class ShoppingCartImpl implements ShoppingCart {
 	}
 
 	@Override
-	public void addAll(@NonNull List<Item> items) {
+	public void addAll(@NonNull Collection<Item> items) {
 		cachedItems.addAll(items);
 	}
 
 	@Override
 	public void removeItem(Item item, int amount) {
-		cachedItems.remove(item, amount);
+		if (contains(item))
+			cachedItems.remove(item, amount);
 	}
 
 	@Override
 	public void removeItem(Item item) {
-		cachedItems.setCount(item, 0);
+		if (contains(item))
+			cachedItems.setCount(item, 0);
 	}
 
 	@Override
 	public void purchase(@NonNull Item item) throws PaymentException {
-		Transaction transaction = createTransaction(getPurchaseTotal(item));
-		paymentService.performTransaction(user.getAccount(), transaction);
-		removeItem(item);
+		if (contains(item)) {
+			Transaction transaction = createTransaction(getPurchaseTotal(item));
+			paymentService.performTransaction(user.getAccount(), transaction);
+			removeItem(item);
+		}
 	}
 
 	@Override
 	public void purchaseAll() throws PaymentException {
-		Transaction transaction = createTransaction(getPurchaseTotal());
-		paymentService.performTransaction(user.getAccount(), transaction);
-		clear();
+		if (!isEmpty()) {
+			Transaction transaction = createTransaction(getPurchaseTotal());
+			paymentService.performTransaction(user.getAccount(), transaction);
+			clear();
+		}
 	}
 
 	@Override
-	public List<Item> getItems() {
+	public Collection<Item> getItems() {
 		return new ArrayList<>(cachedItems);
 	}
 
 	@Override
-	public int getItemCount(@NonNull Item item) {
+	public int getItemCount(Item item) {
 		return cachedItems.count(item);
 	}
 
 	@Override
 	public long getPurchaseTotal() {
-		return cachedItems.stream().mapToLong(Item::getPrice).sum();
+		long total = 0L;
+		if(!isEmpty())
+			total = cachedItems.stream().mapToLong(Item::getPrice).sum();
+		return total;
 	}
 
 	@Override
 	public long getPurchaseTotal(@NonNull Item item) {
-		return item.getPrice() * getItemCount(item);
+		long total = 0L;
+		if(contains(item))
+			total = item.getPrice() * getItemCount(item);
+		return total;
 	}
 
 	private Transaction createTransaction(long purchaseTotal) {

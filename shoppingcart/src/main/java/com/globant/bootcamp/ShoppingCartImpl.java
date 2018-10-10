@@ -12,6 +12,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 @Data
 @Builder(builderMethodName = "hiddenBuilder")
@@ -20,6 +21,9 @@ public class ShoppingCartImpl implements ShoppingCart {
 	private final User user;
 
 	private PaymentService paymentService;
+
+	@Setter(AccessLevel.NONE)
+	private final UUID id = UUID.randomUUID();
 
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -103,7 +107,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 	@Override
 	public long getPurchaseTotal() {
 		long total = 0L;
-		if(!isEmpty())
+		if (!isEmpty())
 			total = cachedItems.stream().mapToLong(Item::getPrice).sum();
 		return total;
 	}
@@ -111,7 +115,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 	@Override
 	public long getPurchaseTotal(@NonNull Item item) {
 		long total = 0L;
-		if(contains(item))
+		if (contains(item))
 			total = item.getPrice() * getItemCount(item);
 		return total;
 	}

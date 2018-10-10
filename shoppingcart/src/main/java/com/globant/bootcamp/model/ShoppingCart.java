@@ -1,9 +1,10 @@
 package com.globant.bootcamp.model;
 
+import com.globant.bootcamp.persistence.Identifiable;
 import com.globant.bootcamp.services.transaction.PaymentException;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * This class represents a shopping cart belonging to a {@link User},
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Rodrigo Grazini
  */
-public interface ShoppingCart {
+public interface ShoppingCart extends Identifiable<UUID> {
 
 	/**
 	 *

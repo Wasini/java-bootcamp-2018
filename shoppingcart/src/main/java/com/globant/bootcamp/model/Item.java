@@ -1,5 +1,7 @@
 package com.globant.bootcamp.model;
 
+import com.globant.bootcamp.persistence.Identifiable;
+
 import java.util.UUID;
 
 /**
@@ -8,7 +10,7 @@ import java.util.UUID;
  *
  * @author Rodrigo Grazini
  */
-public interface Item {
+public interface Item extends Identifiable<UUID> {
 	/**
 	 * @return The name of the item
 	 */

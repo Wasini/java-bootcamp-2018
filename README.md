@@ -1,5 +1,9 @@
 # Java-bootcamp-2018-Goal4-Rodrigo-Grazini
 
+#### ER Diagram
+
+![ER](https://image.ibb.co/nniwr9/highschool.png)
+
 #### Topic 4: SQL - MySql (2 days)
 
 ##### Reading:

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,23 +32,25 @@ public class UserController {
 	@PostMapping(value = "/new")
 	@ApiOperation(value = "Create user with password", notes = "Creates a user with the given name and password")
 	@ApiResponses({
-			@ApiResponse(code = 201, message = "Created user sucessfully"),
+			@ApiResponse(code = 201, message = "Created  user sucessfully"),
 			@ApiResponse(code = 409, message = "Conflict, user already exists")
 	})
 	public ResponseEntity<UserDTO> newUser(
 			@ApiParam(required = true, name = "JSONRequest", value = "Json with the user model")
-			@Valid @RequestBody UserDTO user) {
+			@Valid @RequestBody UserDTO user)  {
+
 		log.info("Creating user {} with password {}", user.getName(), user.getPassword());
 		ResponseEntity<UserDTO> responseEntity;
+
 		if (userService.userAlreadyExists(userAssembler.toEntity(user))) {
 			log.warn("User {} already exists", user.getName());
 			responseEntity = new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		else {
+		} else {
 			User createdUser = userService.createOrUpdate(userAssembler.toEntity(user));
 			log.info("User created successfully");
 			responseEntity = new ResponseEntity<>(userAssembler.toModel(createdUser), HttpStatus.CREATED);
 		}
+
 		return responseEntity;
 	}
 
@@ -57,6 +60,25 @@ public class UserController {
 				.stream()
 				.map(userAssembler::toModel)
 				.collect(Collectors.toList());
+
 		return new ResponseEntity<>(storedUsers, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/{userId}")
+	@ApiOperation(value = "Delete user", notes = "Deletes a user with the given user id")
+	@ApiResponses({
+			@ApiResponse(code = 400, message = "User with given id cannot be found"),
+	})
+	public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+
+		ResponseEntity<Void> response;
+		log.info("Removing user with id {} ", userId);
+		if (userService.userAlreadyExists(userId)) {
+			userService.remove(userId);
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		else
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return response;
 	}
 }

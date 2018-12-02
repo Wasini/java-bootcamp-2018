@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public boolean userAlreadyExists(Long id) {
+		return (id != null && userRepository.existsById(id));
+	}
+
+	@Override
 	public User get(Long id) {
 		return userRepository.findById(id).orElse(null);
 	}

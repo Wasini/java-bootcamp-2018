@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel(value = "Shopping Cart", description = "A shopping cart that holds items for a user")
+@ApiModel(value = "Shopping Cart", description = "A shopping cart that holds items for a com.globant.bootcamp.user")
 public class ShoppingCartDTO {
 
 	@ApiModelProperty(value = "id of the shopping cart", readOnly = true, required = true)

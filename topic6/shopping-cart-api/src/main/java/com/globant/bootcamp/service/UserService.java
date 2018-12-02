@@ -9,6 +9,8 @@ public interface UserService {
 
 	boolean userAlreadyExists(User user);
 
+	boolean userAlreadyExists(Long id);
+
 	void remove(Long id);
 
 	User get(Long id);

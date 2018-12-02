@@ -63,7 +63,7 @@ public class ItemController {
 	@DeleteMapping(value = "/{itemID}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Delete item with id", notes = "Returns the Item with the given id if exists")
 	@ApiResponses({
-			@ApiResponse(code = 404, message = "Item with given id cannot be found"),
+			@ApiResponse(code = 400, message = "Item with given id cannot be found"),
 	})
 	public ResponseEntity<Void> removeItem(
 			@PathVariable Long itemID
